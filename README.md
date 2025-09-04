@@ -9,9 +9,49 @@ This project provides two utilities to test mail connections using OAuth 2.0, ea
 
 1. Prerequisite: Configure OAuth 2.0 Credentials
 
+You must register your application with Microsoft 365 to get a Client ID.
+Instructions for Microsoft 365 / Outlook
+
+    Go to the Microsoft Entra admin center.
+
+    Navigate to Identity -> Applications -> App registrations and create a + New registration.
+
+    Give it a name (e.g., "Mail Connection Tester").
+
+    Under Supported account types, select the appropriate option.
+
+    For Authorization Code Flow: Under Redirect URI, select Web and enter the URI from your mail.properties file (e.g., http://localhost:8888/callback).
+
+    For Device Code Flow: You can skip the Redirect URI configuration.
+
+    Click Register.
+
+    On the app's Overview page, copy the Application (client) ID.
+
+    Navigate to Certificates & secrets to create and copy your Client Secret (needed for Authorization Code Flow, but can also be used by Device Code Flow as a fallback).
+
+    Navigate to API permissions and add the following Delegated permissions from Microsoft Graph:
+
+        offline_access, User.Read, SMTP.Send, IMAP.AccessAsUser.All, Mail.Send.Shared
+
+    CRITICAL for Device Code Flow: Navigate to the Authentication tab. Scroll down and under Advanced settings, set Allow public client flows to Yes. Click Save. This is the recommended setting for the device flow.
+
 2. Project Structure
 
+Place your two Java files (SmtpConnectionTester.java and SmtpConnectionTesterDeviceFlow.java) inside src/main/java/.
 3. Build the Project
+
+    Prerequisites: JDK 11+, Maven.
+
+    Build: Open a terminal in the project root and run:
+
+    mvn clean package
+
+    This will create two JAR files in the target/ directory:
+
+        smtp-tester-auth-code-flow.jar
+
+        smtp-tester-device-code-flow.jar
 
 4. Configure and Run
 
